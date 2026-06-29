@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import {
   Drama, Swords, ScrollText, Search, Users,
   ChevronLeft, ChevronRight, Flame, ShieldAlert, Crown,
@@ -7,7 +7,6 @@ import {
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer
 } from "recharts";
-import { store } from "./store";
 
 /* ============================================================
    CONFIGURÁVEIS — ajuste à vontade ao portar pro seu stack
@@ -65,6 +64,55 @@ const PROFILES = {
   },
 };
 const AXES = ["ator", "estrategista", "narrador", "investigador", "socializador"];
+
+/* Classes (D&D 5e) sugeridas por arquétipo — orientação para iniciantes */
+const CLASSES = {
+  ator: {
+    lista: [
+      { emoji: "🎵", nome: "Bardo", desc: "Carismático, social e cheio de personalidade." },
+      { emoji: "✨", nome: "Feiticeiro", desc: "Magia ligada à própria identidade e história." },
+      { emoji: "🌙", nome: "Bruxo", desc: "Ótimo para quem gosta de pactos e conflitos pessoais." },
+      { emoji: "⚔️", nome: "Paladino", desc: "Ideal para explorar juramentos, dilemas e valores." },
+    ],
+    fecho: "Você provavelmente vai gostar de personagens com uma história marcante e bastante espaço para interpretação.",
+  },
+  estrategista: {
+    lista: [
+      { emoji: "⚔️", nome: "Guerreiro", desc: "Muitas opções táticas durante o combate." },
+      { emoji: "🏹", nome: "Patrulheiro", desc: "Controle de terreno e versatilidade." },
+      { emoji: "🥷", nome: "Ladino", desc: "Posicionamento e ataques precisos." },
+      { emoji: "🥋", nome: "Monge", desc: "Mobilidade e decisões constantes." },
+    ],
+    fecho: "Você provavelmente vai gostar de aprender regras e descobrir novas estratégias ao longo da campanha.",
+  },
+  narrador: {
+    lista: [
+      { emoji: "🧙", nome: "Mago", desc: "Busca conhecimento e desvenda os mistérios do mundo." },
+      { emoji: "🧝", nome: "Druida", desc: "Forte ligação com a natureza e a ambientação." },
+      { emoji: "📜", nome: "Clérigo", desc: "Excelente para campanhas focadas em religião e história." },
+      { emoji: "🎵", nome: "Bardo", desc: "Une narrativa, cultura e interação social." },
+    ],
+    fecho: "Você provavelmente vai gostar de personagens profundamente ligados ao cenário da campanha.",
+  },
+  investigador: {
+    lista: [
+      { emoji: "🥷", nome: "Ladino", desc: "Especialista em perícias e investigação." },
+      { emoji: "🧙", nome: "Mago", desc: "Muitas magias úteis para descobrir informações." },
+      { emoji: "📜", nome: "Clérigo", desc: "Magias divinas de detecção e conhecimento." },
+      { emoji: "🏹", nome: "Patrulheiro", desc: "Rastreamento e sobrevivência." },
+    ],
+    fecho: "Você provavelmente será o jogador que faz perguntas que o mestre não esperava.",
+  },
+  socializador: {
+    lista: [
+      { emoji: "🎵", nome: "Bardo", desc: "Apoia os aliados e incentiva a cooperação." },
+      { emoji: "📜", nome: "Clérigo", desc: "Protege o grupo e fortalece os companheiros." },
+      { emoji: "⚔️", nome: "Paladino", desc: "Atua como líder e inspiração da equipe." },
+      { emoji: "🧝", nome: "Druida", desc: "Versátil e colaborativo." },
+    ],
+    fecho: "Você provavelmente prefere personagens que ajudam o grupo inteiro a brilhar.",
+  },
+};
 
 /* ========================= PERGUNTAS ========================= */
 const QUESTOES = [
@@ -199,7 +247,27 @@ const TIPO_CAMPANHA = [
 ];
 
 /* ====================== STORAGE (swappable) ================== */
-// store importado de ./store.js (Supabase)
+const mem = new Map();
+const store = {
+  async set(key, value) {
+    try { if (window.storage) return await window.storage.set(key, value, true); } catch (e) {}
+    mem.set(key, value); return { key, value };
+  },
+  async get(key) {
+    try { if (window.storage) { const r = await window.storage.get(key, true); return r?.value ?? null; } }
+    catch (e) {}
+    return mem.has(key) ? mem.get(key) : null;
+  },
+  async list(prefix) {
+    try { if (window.storage) { const r = await window.storage.list(prefix, true); return (r?.keys || []).map(k => typeof k === "string" ? k : k.key); } }
+    catch (e) {}
+    return [...mem.keys()].filter(k => k.startsWith(prefix));
+  },
+  async del(key) {
+    try { if (window.storage) return await window.storage.delete(key, true); } catch (e) {}
+    mem.delete(key);
+  },
+};
 /* Chaves escopadas por conclave — um mestre pode ter várias mesas sem misturar */
 const K = {
   meta: (c) => `cz:meta:${c}`,
@@ -323,6 +391,58 @@ function Btn({ children, onClick, variant = "ghost", disabled, style, full }) {
 }
 
 /* =========================== APP ============================= */
+function Particles() {
+  const ref = useRef(null);
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const reduced = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const COLORS = ["#cda434", "#e0c66a", "#e07b39"];
+    let w = 0, h = 0, parts = [], raf = 0;
+    const N = reduced ? 0 : 44;
+    const mk = () => ({
+      x: Math.random() * w, y: Math.random() * h,
+      r: Math.random() * 1.8 + 0.6,
+      vy: -(Math.random() * 0.35 + 0.12),
+      sway: Math.random() * 0.5 + 0.2,
+      phase: Math.random() * Math.PI * 2,
+      tw: Math.random() * 0.018 + 0.004,
+      base: Math.random() * 0.35 + 0.25,
+      color: COLORS[(Math.random() * COLORS.length) | 0],
+    });
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth; h = window.innerHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      canvas.style.width = w + "px"; canvas.style.height = h + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      parts = Array.from({ length: N }, mk);
+    };
+    const frame = () => {
+      ctx.clearRect(0, 0, w, h);
+      for (const p of parts) {
+        p.y += p.vy; p.phase += p.tw;
+        p.x += Math.sin(p.phase) * p.sway * 0.3;
+        if (p.y < -12) { p.y = h + 12; p.x = Math.random() * w; }
+        const op = Math.max(0, p.base + Math.sin(p.phase) * 0.3);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color; ctx.globalAlpha = op;
+        ctx.shadowBlur = 8; ctx.shadowColor = p.color;
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+      raf = requestAnimationFrame(frame);
+    };
+    resize();
+    if (!reduced) raf = requestAnimationFrame(frame);
+    window.addEventListener("resize", resize);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
+  }, []);
+  return <canvas ref={ref} aria-hidden="true" style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }} />;
+}
+
 export default function App() {
   const [view, setView] = useState("home"); // home | player | mestre
 
@@ -338,11 +458,12 @@ export default function App() {
 
   return (
     <div style={{
-      fontFamily: body, color: T.ink, minHeight: "100%",
+      fontFamily: body, color: T.ink, minHeight: "100%", position: "relative",
       background: `radial-gradient(1200px 600px at 50% -10%, #2a1d10 0%, ${T.bg} 55%, #0d0a06 100%)`,
       padding: "clamp(16px, 4vw, 40px)",
     }}>
-      <div style={{ maxWidth: 720, margin: "0 auto" }}>
+      <Particles />
+      <div style={{ maxWidth: 720, margin: "0 auto", position: "relative", zIndex: 1 }}>
         <Header view={view} onHome={() => setView("home")} />
         {view === "home" && <Home onPick={setView} />}
         {view === "player" && <PlayerFlow onHome={() => setView("home")} />}
@@ -718,6 +839,26 @@ function PlayerFlow({ onHome }) {
         <div style={{ textAlign: "center", color: T.ink2, fontSize: 14.5 }}>
           Dominante <strong style={{ color: dom.cor }}>{dom.nome}</strong>, com um forte traço de <strong style={{ color: sec.cor }}>{sec.nome}</strong> · {sec.sub.toLowerCase()}
         </div>
+      </Panel>
+
+      <Panel cor={dom.cor} style={{ marginTop: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+          <dom.Icone size={18} style={{ color: dom.cor }} />
+          <h3 style={{ fontFamily: display, fontSize: 16, color: T.ink, margin: 0 }}>Classes que combinam com você</h3>
+        </div>
+        <p style={{ color: T.ink2, fontSize: 13.5, margin: "0 0 14px" }}>Começando agora? Estas costumam cair bem no seu estilo (D&D 5e):</p>
+        <div style={{ display: "grid", gap: 9 }}>
+          {CLASSES[ranking[0]].lista.map((c) => (
+            <div key={c.nome} style={{ display: "flex", gap: 12, alignItems: "flex-start", padding: "11px 13px", borderRadius: 6, background: T.bg2, border: `1px solid ${T.lineSoft}` }}>
+              <span style={{ fontSize: 20, lineHeight: 1.1, flexShrink: 0 }}>{c.emoji}</span>
+              <div>
+                <div style={{ fontFamily: display, fontSize: 15, color: T.ink }}>{c.nome}</div>
+                <div style={{ fontSize: 13.5, color: T.ink2 }}>{c.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p style={{ color: T.ink2, fontSize: 13.5, fontStyle: "italic", margin: "14px 0 0" }}>{CLASSES[ranking[0]].fecho}</p>
       </Panel>
 
       {!salvo ? (
