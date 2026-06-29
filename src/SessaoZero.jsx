@@ -7,6 +7,7 @@ import {
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer
 } from "recharts";
+import { store } from "./store";
 
 /* ============================================================
    CONFIGURÁVEIS — ajuste à vontade ao portar pro seu stack
@@ -247,27 +248,7 @@ const TIPO_CAMPANHA = [
 ];
 
 /* ====================== STORAGE (swappable) ================== */
-const mem = new Map();
-const store = {
-  async set(key, value) {
-    try { if (window.storage) return await window.storage.set(key, value, true); } catch (e) {}
-    mem.set(key, value); return { key, value };
-  },
-  async get(key) {
-    try { if (window.storage) { const r = await window.storage.get(key, true); return r?.value ?? null; } }
-    catch (e) {}
-    return mem.has(key) ? mem.get(key) : null;
-  },
-  async list(prefix) {
-    try { if (window.storage) { const r = await window.storage.list(prefix, true); return (r?.keys || []).map(k => typeof k === "string" ? k : k.key); } }
-    catch (e) {}
-    return [...mem.keys()].filter(k => k.startsWith(prefix));
-  },
-  async del(key) {
-    try { if (window.storage) return await window.storage.delete(key, true); } catch (e) {}
-    mem.delete(key);
-  },
-};
+// store importado de ./store.js (Supabase)
 /* Chaves escopadas por conclave — um mestre pode ter várias mesas sem misturar */
 const K = {
   meta: (c) => `cz:meta:${c}`,
