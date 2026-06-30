@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import {
   Drama, Swords, ScrollText, Search, Users,
   ChevronLeft, ChevronRight, Flame, ShieldAlert, Crown,
-  RotateCcw, Trash2, Check, Eye, EyeOff, Scroll, UserRound, Copy, CalendarDays, ExternalLink
+  RotateCcw, Trash2, Check, Eye, EyeOff, Scroll, UserRound, Copy, CalendarDays, ExternalLink, Download, Share2
 } from "lucide-react";
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer
@@ -125,6 +125,101 @@ const CLASSES = {
   },
 };
 
+/* Tormenta20 */
+const CLASSES_T20 = {
+  ator: { lista: [
+    { emoji: "🎻", nome: "Bardo", desc: "Carisma, atuação e presença de palco." },
+    { emoji: "👑", nome: "Nobre", desc: "Liderança, etiqueta e jogo de corte." },
+    { emoji: "🗡️", nome: "Bucaneiro", desc: "Audácia e estilo em cada cena." },
+    { emoji: "⚔️", nome: "Paladino", desc: "Juramentos, valores e dilemas." },
+  ], fecho: "Você curte um herói com história forte e muito espaço pra interpretar." },
+  estrategista: { lista: [
+    { emoji: "⚔️", nome: "Guerreiro", desc: "Versátil e tático no combate." },
+    { emoji: "🏹", nome: "Caçador", desc: "Preparação, terreno e armadilhas." },
+    { emoji: "🥷", nome: "Ladino", desc: "Precisão e posicionamento." },
+    { emoji: "🔧", nome: "Inventor", desc: "Engenhocas e combinações." },
+  ], fecho: "Você vai gostar de otimizar a ficha e planejar cada turno." },
+  narrador: { lista: [
+    { emoji: "✨", nome: "Arcanista", desc: "Busca o saber e os segredos de Arton." },
+    { emoji: "🌿", nome: "Druida", desc: "Ligação profunda com o mundo natural." },
+    { emoji: "📜", nome: "Clérigo", desc: "Panteão, fé e história do cenário." },
+    { emoji: "🎻", nome: "Bardo", desc: "Cultura, lendas e narrativa." },
+  ], fecho: "Você curte personagens enraizados no mundo da campanha." },
+  investigador: { lista: [
+    { emoji: "🥷", nome: "Ladino", desc: "Perícias, furtividade e investigação." },
+    { emoji: "✨", nome: "Arcanista", desc: "Magias de detecção e conhecimento." },
+    { emoji: "🏹", nome: "Caçador", desc: "Rastreamento e leitura do ambiente." },
+    { emoji: "🔧", nome: "Inventor", desc: "Analisa e desmonta cada enigma." },
+  ], fecho: "Você será quem nota o detalhe que os outros passaram batido." },
+  socializador: { lista: [
+    { emoji: "🎻", nome: "Bardo", desc: "Inspira e fortalece os aliados." },
+    { emoji: "👑", nome: "Nobre", desc: "Lidera e une o grupo." },
+    { emoji: "📜", nome: "Clérigo", desc: "Protege e cura a mesa." },
+    { emoji: "⚔️", nome: "Paladino", desc: "Referência moral e inspiração do grupo." },
+  ], fecho: "Você prefere personagens que fazem o grupo todo brilhar." },
+};
+
+/* Ordem Paranormal — 3 classes que se ramificam em Trilhas */
+const CLASSES_ORDEM = {
+  ator: { lista: [
+    { emoji: "🔮", nome: "Ocultista · Conduíte", desc: "Canaliza o Outro Lado; uma persona intensa." },
+    { emoji: "🗣️", nome: "Especialista · Negociador", desc: "Lábia, presença e jogo de cena." },
+    { emoji: "🩸", nome: "Ocultista · Flagelador", desc: "Drama e sacrifício pessoal." },
+  ], fecho: "Você curte encarnar alguém intenso, cheio de drama." },
+  estrategista: { lista: [
+    { emoji: "🎯", nome: "Combatente · Operações Especiais", desc: "Táticas e preparação." },
+    { emoji: "🛡️", nome: "Combatente · Comandante de Campo", desc: "Controle do campo de batalha." },
+    { emoji: "🥷", nome: "Especialista · Infiltrador", desc: "Planejamento e precisão." },
+  ], fecho: "Você gosta de pensar o combate e a missão alguns passos à frente." },
+  narrador: { lista: [
+    { emoji: "📚", nome: "Ocultista · Graduado", desc: "O estudioso que entende o oculto e o pano de fundo." },
+    { emoji: "🔮", nome: "Ocultista · Conduíte", desc: "Conexão profunda com o Outro Lado e seus mitos." },
+    { emoji: "🧠", nome: "Especialista · Técnico", desc: "Junta o saber por trás de cada caso." },
+  ], fecho: "Você curte entender o oculto e o pano de fundo de cada caso." },
+  investigador: { lista: [
+    { emoji: "🔎", nome: "Especialista · Infiltrador", desc: "Astúcia, furtividade e leitura de cena." },
+    { emoji: "🧠", nome: "Especialista · Técnico", desc: "Conhecimento e análise técnica." },
+    { emoji: "🎯", nome: "Especialista · Atirador de Elite", desc: "Paciência e olhar afiado." },
+  ], fecho: "O Especialista era literalmente o 'Investigador' — feito pra você." },
+  socializador: { lista: [
+    { emoji: "🩺", nome: "Especialista · Médico de Campo", desc: "Mantém o grupo de pé." },
+    { emoji: "🗣️", nome: "Especialista · Negociador", desc: "A cola social do grupo." },
+    { emoji: "🛡️", nome: "Combatente · Comandante de Campo", desc: "Lidera e protege a equipe." },
+  ], fecho: "Você prefere personagens que seguram a mesa unida." },
+};
+
+/* Mago: A Ascensão — não tem classes; tem as nove Tradições */
+const CLASSES_MAGO = {
+  ator: { lista: [
+    { emoji: "🎭", nome: "Culto do Êxtase", desc: "Vive a magia pela experiência e pela performance." },
+    { emoji: "🌹", nome: "Verbena", desc: "Paixão crua, sangue e instinto." },
+  ], fecho: "Você encarna o papel com tudo — sensação e intensidade." },
+  estrategista: { lista: [
+    { emoji: "📐", nome: "Ordem de Hermes", desc: "Magia formal, estruturada e metódica." },
+    { emoji: "💾", nome: "Adeptos Virtuais", desc: "Otimiza a realidade como quem hackeia o sistema." },
+  ], fecho: "Você domina o poder pela estrutura e pelo plano certo." },
+  narrador: { lista: [
+    { emoji: "🌙", nome: "Oradores dos Sonhos", desc: "Guardam mitos, espíritos e histórias do mundo." },
+    { emoji: "✨", nome: "Coro Celestial", desc: "Acreditam numa grande narrativa cósmica." },
+  ], fecho: "Você se liga ao significado e aos mitos por trás de tudo." },
+  investigador: { lista: [
+    { emoji: "💾", nome: "Adeptos Virtuais", desc: "Informação, dados e decifrar a própria realidade." },
+    { emoji: "🔬", nome: "Filhos do Éter", desc: "Ciência, hipóteses e experimentação." },
+  ], fecho: "Você decifra a realidade como um enigma a ser resolvido." },
+  socializador: { lista: [
+    { emoji: "✨", nome: "Coro Celestial", desc: "Uma comunidade unida por fé e propósito." },
+    { emoji: "🌹", nome: "Verbena", desc: "O coven, o grupo, os laços de sangue." },
+  ], fecho: "Você joga pelos laços e pela união do grupo." },
+};
+
+const SISTEMAS_REGRAS = ["D&D 5e", "Tormenta20", "Ordem Paranormal", "Mago: A Ascensão"];
+const REC_SISTEMAS = {
+  "D&D 5e": { rotulo: "Classes", mapa: CLASSES },
+  "Tormenta20": { rotulo: "Classes", mapa: CLASSES_T20 },
+  "Ordem Paranormal": { rotulo: "Classes & Trilhas", mapa: CLASSES_ORDEM },
+  "Mago: A Ascensão": { rotulo: "Tradições", mapa: CLASSES_MAGO },
+};
+
 /* ========================= PERGUNTAS ========================= */
 const QUESTOES = [
   { q: "Numa taverna nova, o que você faz primeiro?", o: [
@@ -217,9 +312,9 @@ const RED_FLAGS = [
 
 /* ====================== EIXOS DE TOM ========================= */
 const TONS = [
-  { id: "heroismo", esq: "Heroico", dir: "Sombrio" },
-  { id: "humor", esq: "Sério", dir: "Cômico" },
-  { id: "letalidade", esq: "Seguro", dir: "Mortal" },
+  { id: "heroismo", nome: "Heroísmo", esq: "Heroico", dir: "Sombrio" },
+  { id: "humor", nome: "Humor", esq: "Sério", dir: "Cômico" },
+  { id: "letalidade", nome: "Letalidade", esq: "Seguro", dir: "Mortal" },
 ];
 
 /* ===================== FICHA DO JOGADOR ====================== */
@@ -273,9 +368,9 @@ async function gerarCodigo() {
   }
   return Math.random().toString(36).slice(2, 6).toUpperCase();
 }
-async function criarConclave({ nome, senha }) {
+async function criarConclave({ nome, senha, esperados, sistema }) {
   const codigo = await gerarCodigo();
-  const meta = { codigo, nome: (nome || "").trim() || "Conclave sem nome", senha: (senha || "").trim() || "mestre", criadoEm: Date.now() };
+  const meta = { codigo, nome: (nome || "").trim() || "Conclave sem nome", senha: (senha || "").trim() || "mestre", esperados: Math.max(0, parseInt(esperados, 10) || 0), sistema: sistema || "D&D 5e", encerrado: false, criadoEm: Date.now() };
   await store.set(K.meta(codigo), JSON.stringify(meta));
   return meta;
 }
@@ -329,7 +424,7 @@ const DEMO = [
 ];
 async function semearDemo() {
   const codigo = "DEMO";
-  await store.set(K.meta(codigo), JSON.stringify({ codigo, nome: "A Sociedade do Salão", senha: "mestre", criadoEm: Date.now() }));
+  await store.set(K.meta(codigo), JSON.stringify({ codigo, nome: "A Sociedade do Salão", senha: "mestre", esperados: 4, sistema: "D&D 5e", encerrado: false, criadoEm: Date.now() }));
   for (const base of DEMO) {
     const rank = [...AXES].sort((a, b) => base.scores[b] - base.scores[a]);
     const payload = {
@@ -382,6 +477,70 @@ function Btn({ children, onClick, variant = "ghost", disabled, style, full }) {
 }
 
 /* =========================== APP ============================= */
+function carregarImagem(src) {
+  return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
+}
+function roundRectPath(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function desenharRadar(ctx, cx, cy, R, scores) {
+  const n = AXES.length;
+  const ang = i => -Math.PI / 2 + i * 2 * Math.PI / n;
+  ctx.strokeStyle = "rgba(205,164,52,.2)"; ctx.lineWidth = 1;
+  for (let ring = 1; ring <= 3; ring++) {
+    const rr = R * ring / 3;
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) { const x = cx + rr * Math.cos(ang(i)), y = cy + rr * Math.sin(ang(i)); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+    ctx.closePath(); ctx.stroke();
+  }
+  for (let i = 0; i < n; i++) { ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + R * Math.cos(ang(i)), cy + R * Math.sin(ang(i))); ctx.stroke(); }
+  ctx.beginPath();
+  for (let i = 0; i < n; i++) { const v = Math.max(0.05, (scores[AXES[i]] || 0) / QUESTOES.length); const rr = R * v; const x = cx + rr * Math.cos(ang(i)), y = cy + rr * Math.sin(ang(i)); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+  ctx.closePath();
+  ctx.fillStyle = "rgba(205,164,52,.3)"; ctx.fill();
+  ctx.strokeStyle = "#cda434"; ctx.lineWidth = 2.5; ctx.stroke();
+  ctx.fillStyle = "#b6a489"; ctx.font = "600 20px Cinzel, serif"; ctx.textAlign = "center";
+  for (let i = 0; i < n; i++) { const lx = cx + (R + 30) * Math.cos(ang(i)), ly = cy + (R + 30) * Math.sin(ang(i)) + 6; ctx.fillText(PROFILES[AXES[i]].nome, lx, ly); }
+}
+async function gerarCardPNG({ nome, domId, scores }) {
+  const W = 1080, H = 1500;
+  const canvas = document.createElement("canvas");
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext("2d");
+  const g = ctx.createRadialGradient(W / 2, -80, 120, W / 2, 360, 1300);
+  g.addColorStop(0, "#2a1d10"); g.addColorStop(0.5, "#15100b"); g.addColorStop(1, "#0d0a06");
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = "#cda434"; ctx.lineWidth = 3; ctx.strokeRect(30, 30, W - 60, H - 60);
+  ctx.strokeStyle = "rgba(205,164,52,.3)"; ctx.lineWidth = 1; ctx.strokeRect(44, 44, W - 88, H - 88);
+  try { await document.fonts.load("700 56px Cinzel"); await document.fonts.load("italic 28px Spectral"); await document.fonts.ready; } catch (e) {}
+  const prof = PROFILES[domId];
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#cda434"; ctx.font = "700 26px Cinzel, serif";
+  ctx.fillText("ENTRE PLANOS  ·  SESSÃO ZERO", W / 2, 100);
+  const img = await carregarImagem(CARDS[domId]);
+  const cw = 560, ch = cw * (img.height / img.width), cx0 = (W - cw) / 2, cy0 = 140;
+  ctx.save(); roundRectPath(ctx, cx0, cy0, cw, ch, 16); ctx.clip();
+  ctx.drawImage(img, cx0, cy0, cw, ch); ctx.restore();
+  ctx.strokeStyle = "#cda434"; ctx.lineWidth = 3; roundRectPath(ctx, cx0, cy0, cw, ch, 16); ctx.stroke();
+  let y = cy0 + ch + 66;
+  ctx.fillStyle = "#efe3cf"; ctx.font = "700 52px Cinzel, serif";
+  ctx.fillText(nome || "Jogador", W / 2, y);
+  y += 46;
+  ctx.fillStyle = prof.cor; ctx.font = "600 32px Cinzel, serif";
+  ctx.fillText(prof.nome, W / 2, y);
+  if (prof.lema) { y += 38; ctx.fillStyle = "#b6a489"; ctx.font = "italic 26px Spectral, serif"; ctx.fillText("\u201C" + prof.lema + "\u201D", W / 2, y); }
+  desenharRadar(ctx, W / 2, y + 70 + 175, 175, scores);
+  ctx.fillStyle = "#8d7a5e"; ctx.font = "400 22px Spectral, serif";
+  ctx.fillText("descubra o seu arquétipo", W / 2, H - 72);
+  return await new Promise(res => canvas.toBlob(res, "image/png"));
+}
+
 function Particles() {
   const ref = useRef(null);
   useEffect(() => {
@@ -551,6 +710,7 @@ function EntradaCodigo({ onValido }) {
     const meta = await getConclave(c);
     setChecando(false);
     if (!meta) { setErro("Conclave não encontrado. Confira o código com o mestre."); return; }
+    if (meta.encerrado) { setErro("Este conclave foi encerrado pelo mestre."); return; }
     onValido(c, meta);
   };
   return (
@@ -606,6 +766,7 @@ function PlayerFlow({ onHome }) {
   const [veus, setVeus] = useState("");
   const [expect, setExpect] = useState("");
   const [salvo, setSalvo] = useState(false);
+  const [gerando, setGerando] = useState(false);
 
   // ordem das opções sorteada uma vez por sessão (estável ao navegar)
   const quiz = useMemo(() => QUESTOES.map(q => ({ q: q.q, o: embaralhar(q.o) })), []);
@@ -834,7 +995,41 @@ function PlayerFlow({ onHome }) {
 
   /* -------- RESULTADO -------- */
   const dom = PROFILES[ranking[0]], sec = PROFILES[ranking[1]];
+  const sistemaConclave = (conclave && conclave.sistema) || "D&D 5e";
+  const recSis = REC_SISTEMAS[sistemaConclave] || REC_SISTEMAS["D&D 5e"];
+  const recArq = recSis.mapa[ranking[0]] || CLASSES[ranking[0]];
   const reduce = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const podeCompartilhar = typeof navigator !== "undefined" && !!navigator.canShare;
+  const fazerCard = async () => gerarCardPNG({ nome: nome.trim() || "Jogador", domId: ranking[0], scores });
+  const baixarCard = async () => {
+    setGerando(true);
+    try {
+      const blob = await fazerCard();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = `card-${(nome.trim() || "jogador").toLowerCase().replace(/\s+/g, "-")}.png`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (e) { window.alert("Não consegui gerar a imagem agora."); }
+    setGerando(false);
+  };
+  const compartilharCard = async () => {
+    setGerando(true);
+    try {
+      const blob = await fazerCard();
+      const file = new File([blob], "meu-card.png", { type: "image/png" });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: "Meu arquétipo · Sessão Zero" });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url; a.download = "meu-card.png";
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+    } catch (e) {}
+    setGerando(false);
+  };
   return (
     <div>
       <div data-reveal style={{ fontFamily: display, color: T.gold, fontSize: 12, letterSpacing: ".25em", textTransform: "uppercase", textAlign: "center", marginBottom: 12, animation: reduce ? undefined : "szFadeIn .5s ease both" }}>
@@ -853,11 +1048,11 @@ function PlayerFlow({ onHome }) {
       <Panel cor={dom.cor} style={{ marginTop: 16, animation: reduce ? undefined : "szFadeIn .6s ease .3s both" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
           <dom.Icone size={18} style={{ color: dom.cor }} />
-          <h3 style={{ fontFamily: display, fontSize: 16, color: T.ink, margin: 0 }}>Classes que combinam com você</h3>
+          <h3 style={{ fontFamily: display, fontSize: 16, color: T.ink, margin: 0 }}>{recSis.rotulo} que combinam com você</h3>
         </div>
-        <p style={{ color: T.ink2, fontSize: 13.5, margin: "0 0 14px" }}>Começando agora? Estas costumam cair bem no seu estilo (D&D 5e):</p>
+        <p style={{ color: T.ink2, fontSize: 13.5, margin: "0 0 14px" }}>Começando agora? Combinam com o seu estilo em {sistemaConclave}:</p>
         <div style={{ display: "grid", gap: 9 }}>
-          {CLASSES[ranking[0]].lista.map((c) => (
+          {recArq.lista.map((c) => (
             <div key={c.nome} style={{ display: "flex", gap: 12, alignItems: "flex-start", padding: "11px 13px", borderRadius: 6, background: T.bg2, border: `1px solid ${T.lineSoft}` }}>
               <span style={{ fontSize: 20, lineHeight: 1.1, flexShrink: 0 }}>{c.emoji}</span>
               <div>
@@ -867,8 +1062,13 @@ function PlayerFlow({ onHome }) {
             </div>
           ))}
         </div>
-        <p style={{ color: T.ink2, fontSize: 13.5, fontStyle: "italic", margin: "14px 0 0" }}>{CLASSES[ranking[0]].fecho}</p>
+        <p style={{ color: T.ink2, fontSize: 13.5, fontStyle: "italic", margin: "14px 0 0" }}>{recArq.fecho}</p>
       </Panel>
+
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 16, flexWrap: "wrap" }}>
+        <Btn onClick={baixarCard} disabled={gerando}><Download size={15} /> {gerando ? "Gerando..." : "Baixar meu card"}</Btn>
+        {podeCompartilhar && <Btn onClick={compartilharCard} disabled={gerando}><Share2 size={15} /> Compartilhar</Btn>}
+      </div>
 
       {!salvo ? (
         <div style={{ display: "flex", gap: 12, marginTop: 16, justifyContent: "space-between" }}>
@@ -955,13 +1155,15 @@ function Mestre({ onHome }) {
   const [conclave, setConclave] = useState(null);
   if (etapa === "entrada")
     return <MestreEntrada onEntrar={(c, meta) => { setCodigo(c); setConclave(meta); setEtapa("painel"); }} />;
-  return <MestrePainel codigo={codigo} conclave={conclave} onTrocar={() => setEtapa("entrada")} />;
+  return <MestrePainel codigo={codigo} conclave={conclave} onTrocar={() => setEtapa("entrada")} onAtualizar={(meta) => setConclave(meta)} />;
 }
 
 function MestreEntrada({ onEntrar }) {
   const [modo, setModo] = useState("criar"); // criar | acessar
   const [nome, setNome] = useState("");
   const [senha, setSenha] = useState("");
+  const [esperados, setEsperados] = useState("");
+  const [sistema, setSistema] = useState("D&D 5e");
   const [codigo, setCodigo] = useState("");
   const [verSenha, setVerSenha] = useState(false);
   const [erro, setErro] = useState("");
@@ -969,7 +1171,7 @@ function MestreEntrada({ onEntrar }) {
 
   const criar = async () => {
     setBusy(true);
-    const meta = await criarConclave({ nome, senha });
+    const meta = await criarConclave({ nome, senha, esperados, sistema });
     setBusy(false);
     onEntrar(meta.codigo, meta);
   };
@@ -1005,6 +1207,12 @@ function MestreEntrada({ onEntrar }) {
               <button onClick={() => setVerSenha(v => !v)} style={{ position: "absolute", right: 12, top: 13, background: "none", border: "none", color: T.ink3, cursor: "pointer" }}>{verSenha ? <EyeOff size={18} /> : <Eye size={18} />}</button>
             </div>
           </Grupo>
+          <Grupo label="Quantos jogadores você espera? (opcional)"><input type="number" min="0" max="20" value={esperados} onChange={e => setEsperados(e.target.value)} placeholder="Ex.: 5" style={inputStyle} /></Grupo>
+          <Grupo label="Sistema de regras (para sugerir classes)">
+            <select value={sistema} onChange={e => setSistema(e.target.value)} style={inputStyle}>
+              {SISTEMAS_REGRAS.map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </Grupo>
           <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6, gap: 8, flexWrap: "wrap" }}>
             <Btn onClick={async () => { const m = await semearDemo(); onEntrar(m.codigo, m); }}>Conclave de exemplo</Btn>
             <Btn variant="solid" disabled={busy || !nome.trim()} onClick={criar}>Criar e ver código <ChevronRight size={16} /></Btn>
@@ -1030,8 +1238,9 @@ function MestreEntrada({ onEntrar }) {
   );
 }
 
-function MestrePainel({ codigo, conclave, onTrocar }) {
+function MestrePainel({ codigo, conclave, onTrocar, onAtualizar }) {
   const [dados, setDados] = useState(null);
+  const [meta, setMeta] = useState(conclave);
 
   const carregar = useCallback(async () => {
     const keys = await store.list(K.respPrefix(codigo));
@@ -1046,11 +1255,42 @@ function MestrePainel({ codigo, conclave, onTrocar }) {
 
   useEffect(() => { carregar(); }, [carregar]);
 
+  const salvarMeta = useCallback(async (patch) => {
+    const novo = { ...meta, ...patch };
+    await store.set(K.meta(codigo), JSON.stringify(novo));
+    setMeta(novo);
+    if (onAtualizar) onAtualizar(novo);
+  }, [meta, codigo, onAtualizar]);
+
+  const renomear = () => {
+    const n = window.prompt("Novo nome do conclave:", meta?.nome || "");
+    if (n && n.trim()) salvarMeta({ nome: n.trim() });
+  };
+  const definirEsperados = () => {
+    const v = window.prompt("Quantos jogadores você espera? (0 para não controlar)", String(meta?.esperados || 0));
+    if (v !== null) salvarMeta({ esperados: Math.max(0, parseInt(v, 10) || 0) });
+  };
+  const alternarEncerrado = () => {
+    if (meta?.encerrado) { salvarMeta({ encerrado: false }); return; }
+    if (window.confirm("Encerrar o conclave? Os jogadores não poderão mais responder (você pode reabrir depois).")) salvarMeta({ encerrado: true });
+  };
+  const apagarResposta = async (d) => {
+    if (window.confirm(`Apagar a resposta de ${d.nome || "este jogador"}?`)) { await store.del(K.resp(codigo, d.id)); carregar(); }
+  };
+
   if (!dados) return <Panel><p style={{ color: T.ink2 }}>Consultando os pergaminhos...</p></Panel>;
+
 
   if (dados.length === 0) return (
     <div style={{ display: "grid", gap: 16 }}>
-      <CodigoBadge codigo={codigo} conclave={conclave} />
+      <CodigoBadge codigo={codigo} conclave={meta} />
+      {meta?.encerrado && (
+        <Panel cor={T.blood} style={{ padding: "12px 16px", display: "flex", alignItems: "center", gap: 10 }}>
+          <ShieldAlert size={18} style={{ color: T.blood, flexShrink: 0 }} />
+          <span style={{ color: T.ink, fontSize: 14 }}>Conclave encerrado — jogadores não conseguem mais responder.</span>
+        </Panel>
+      )}
+      <ProgressoMesa feitos={0} esperados={meta?.esperados} />
       <Panel style={{ textAlign: "center" }}>
         <Scroll size={30} style={{ color: T.ink3 }} />
         <p style={{ color: T.ink2, marginTop: 10 }}>Nenhum jogador preencheu ainda. Repasse o código <strong style={{ color: T.gold }}>{codigo}</strong> à sua mesa.</p>
@@ -1076,9 +1316,24 @@ function MestrePainel({ codigo, conclave, onTrocar }) {
   const procuraRank = Object.entries(procuraCount).sort((a, b) => b[1] - a[1]);
   const contar = (campo, valor) => dados.filter(d => d[campo] === valor).length;
 
+  // --- Pacto da Mesa: atritos, regras consensuais, linhas/véus ---
+  const tomStats = TONS.map(t => {
+    const vals = dados.map(d => ({ nome: d.nome || "Jogador", v: d.tom?.[t.id] ?? 50 }));
+    const nums = vals.map(x => x.v);
+    const min = Math.min(...nums), max = Math.max(...nums);
+    const lo = vals.reduce((a, b) => (b.v < a.v ? b : a), vals[0]);
+    const hi = vals.reduce((a, b) => (b.v > a.v ? b : a), vals[0]);
+    return { ...t, avg: tomAvg[t.id], vals, min, max, spread: max - min, lo, hi, dividida: (max - min) >= 45 && dados.length > 1 };
+  });
+  const atritos = tomStats.filter(s => s.dividida).sort((a, b) => b.spread - a.spread);
+  const regraMin = Math.max(2, Math.ceil(dados.length / 2));
+  const regras = flagsRank.filter(([, n]) => n >= regraMin);
+  const linhasList = dados.filter(d => (d.linhas || "").trim()).map(d => ({ nome: d.nome || "Jogador", txt: d.linhas.trim() }));
+  const veusList = dados.filter(d => (d.veus || "").trim()).map(d => ({ nome: d.nome || "Jogador", txt: d.veus.trim() }));
+
   return (
     <div style={{ display: "grid", gap: 16 }}>
-      <CodigoBadge codigo={codigo} conclave={conclave} />
+      <CodigoBadge codigo={codigo} conclave={meta} />
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div style={{ color: T.ink2, fontFamily: display, fontSize: 13, letterSpacing: ".1em" }}>
           {dados.length} {dados.length === 1 ? "jogador" : "jogadores"} no conclave
@@ -1095,11 +1350,110 @@ function MestrePainel({ codigo, conclave, onTrocar }) {
         </div>
       </div>
 
+      {meta?.encerrado && (
+        <Panel cor={T.blood} style={{ padding: "12px 16px", display: "flex", alignItems: "center", gap: 10 }}>
+          <ShieldAlert size={18} style={{ color: T.blood, flexShrink: 0 }} />
+          <span style={{ color: T.ink, fontSize: 14 }}>Conclave encerrado — jogadores não conseguem mais responder. Você pode reabrir na gestão, lá embaixo.</span>
+        </Panel>
+      )}
+      <ProgressoMesa feitos={dados.length} esperados={meta?.esperados} />
+
       {/* visão de grupo */}
       <Panel>
         <h2 style={{ ...H2, marginBottom: 4 }}>A alma da mesa</h2>
         <p style={{ color: T.ink2, fontSize: 14, marginBottom: 6 }}>Perfil médio do grupo todo.</p>
         <Sigil data={grupoRadar} cor={T.gold} size={230} />
+      </Panel>
+
+      {/* PACTO DA MESA */}
+      <Panel cor={T.gold}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+          <Scroll size={18} style={{ color: T.gold }} />
+          <h3 style={{ fontFamily: display, fontSize: 17, color: T.ink, margin: 0 }}>Pacto da Mesa</h3>
+        </div>
+        <p style={{ color: T.ink2, fontSize: 13.5, margin: "0 0 16px" }}>O acordo do grupo — e onde ainda falta conversar. Para ler em voz alta na sessão zero.</p>
+
+        {tomStats.map(s => (
+          <div key={s.id} style={{ marginBottom: 13 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+              <span style={{ fontFamily: display, fontSize: 13, color: T.ink }}>{s.nome} <span style={{ color: T.ink3 }}>· média {s.avg}</span></span>
+              <span style={{ fontSize: 10, letterSpacing: ".05em", textTransform: "uppercase", fontFamily: display, padding: "2px 9px", borderRadius: 999,
+                background: s.dividida ? "rgba(168,50,50,.16)" : "rgba(205,164,52,.14)", color: s.dividida ? T.ember : T.goldSoft }}>
+                {s.dividida ? "dividida" : "alinhada"}
+              </span>
+            </div>
+            <div style={{ position: "relative", height: 20 }}>
+              <div style={{ position: "absolute", top: 8, left: 0, right: 0, height: 4, borderRadius: 8, background: T.bg2, border: `1px solid ${T.lineSoft}` }} />
+              {s.dividida && <div style={{ position: "absolute", top: 8, left: `${s.min}%`, width: `${s.max - s.min}%`, height: 4, borderRadius: 8, background: "rgba(168,50,50,.42)" }} />}
+              {s.vals.map((p, i) => (
+                <div key={i} title={`${p.nome} · ${p.v}`} style={{ position: "absolute", top: 5, left: `${p.v}%`, transform: "translateX(-50%)", width: 10, height: 10, borderRadius: "50%", background: T.bg, border: `1.5px solid ${T.ink2}`, boxSizing: "border-box" }} />
+              ))}
+              <div style={{ position: "absolute", top: 1, left: `${s.avg}%`, transform: "translateX(-50%)", width: 2, height: 18, background: T.gold }} />
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", fontFamily: display, fontSize: 11, color: T.ink3, marginTop: 2 }}>
+              <span>{s.esq}</span><span>{s.dir}</span>
+            </div>
+          </div>
+        ))}
+
+        {atritos.length > 0 && (
+          <div style={{ marginTop: 16 }}>
+            <div style={{ fontFamily: display, fontSize: 12, letterSpacing: ".08em", textTransform: "uppercase", color: T.ember, marginBottom: 8 }}>Pontos de atrito · vale conversar antes</div>
+            <div style={{ display: "grid", gap: 8 }}>
+              {atritos.map(s => (
+                <div key={s.id} style={{ display: "flex", gap: 9, alignItems: "flex-start", padding: "10px 12px", borderRadius: 6, background: "rgba(168,50,50,.1)", border: "1px solid rgba(168,50,50,.3)" }}>
+                  <ShieldAlert size={16} style={{ color: T.ember, flexShrink: 0, marginTop: 1 }} />
+                  <div style={{ fontSize: 13.5, color: T.ink, lineHeight: 1.45 }}>
+                    <strong style={{ color: T.ember }}>{s.nome}.</strong> {s.hi.nome} puxa pra "{s.dir}" ({s.hi.v}), {s.lo.nome} pra "{s.esq}" ({s.lo.v}).
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {regras.length > 0 && (
+          <div style={{ marginTop: 18 }}>
+            <div style={{ fontFamily: display, fontSize: 12, letterSpacing: ".08em", textTransform: "uppercase", color: T.ink2, marginBottom: 8 }}>Regras da mesa · marcadas por {regraMin}+</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
+              {regras.map(([id]) => {
+                const label = RED_FLAGS.find(r => r[0] === id)?.[1] || id;
+                return <span key={id} style={{ fontSize: 12.5, padding: "5px 11px", borderRadius: 999, background: T.bg2, border: `1px solid ${T.lineSoft}`, color: T.ink }}>{label}</span>;
+              })}
+            </div>
+          </div>
+        )}
+
+        {(linhasList.length > 0 || veusList.length > 0) && (
+          <div style={{ marginTop: 18, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 16 }}>
+            {linhasList.length > 0 && (
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: display, fontSize: 12, letterSpacing: ".06em", textTransform: "uppercase", color: T.blood, marginBottom: 8 }}>
+                  <ShieldAlert size={14} /> Linhas · nunca em cena
+                </div>
+                {linhasList.map((l, i) => (
+                  <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 13.5, color: T.ink, padding: "4px 0", lineHeight: 1.4 }}>
+                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: T.blood, marginTop: 6, flexShrink: 0 }} />
+                    <span>{l.txt} <span style={{ color: T.ink3, fontSize: 12 }}>· {l.nome}</span></span>
+                  </div>
+                ))}
+              </div>
+            )}
+            {veusList.length > 0 && (
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: display, fontSize: 12, letterSpacing: ".06em", textTransform: "uppercase", color: T.ink2, marginBottom: 8 }}>
+                  <EyeOff size={14} /> Véus · fora de cena
+                </div>
+                {veusList.map((l, i) => (
+                  <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 13.5, color: T.ink, padding: "4px 0", lineHeight: 1.4 }}>
+                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: T.ink3, marginTop: 6, flexShrink: 0 }} />
+                    <span>{l.txt} <span style={{ color: T.ink3, fontSize: 12 }}>· {l.nome}</span></span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </Panel>
 
       {/* composição da mesa */}
@@ -1129,21 +1483,6 @@ function MestrePainel({ codigo, conclave, onTrocar }) {
           })}
       </Panel>
 
-      {/* tom do grupo */}
-      <Panel>
-        <h3 style={{ fontFamily: display, fontSize: 16, color: T.ink, margin: "0 0 14px" }}>Tom & letalidade desejados pelo grupo</h3>
-        {TONS.map(t => (
-          <div key={t.id} style={{ marginBottom: 14 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", fontFamily: display, fontSize: 12, color: T.ink2, marginBottom: 5 }}>
-              <span>{t.esq}</span><span>{t.dir}</span>
-            </div>
-            <div style={{ position: "relative", height: 8, background: T.bg2, borderRadius: 8, border: `1px solid ${T.lineSoft}` }}>
-              <div style={{ position: "absolute", top: "50%", left: `${tomAvg[t.id]}%`, transform: "translate(-50%,-50%)", width: 14, height: 14, borderRadius: "50%", background: T.gold, border: "2px solid " + T.bg, boxShadow: `0 0 8px ${T.gold}88` }} />
-            </div>
-          </div>
-        ))}
-      </Panel>
-
       {/* red flags do grupo */}
       <Panel cor={T.blood}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
@@ -1169,7 +1508,7 @@ function MestrePainel({ codigo, conclave, onTrocar }) {
 
       {/* jogadores */}
       <h3 style={{ fontFamily: display, fontSize: 18, color: T.ink, margin: "6px 0 -4px", textAlign: "center", letterSpacing: ".04em" }}>Os jogadores</h3>
-      {dados.map(d => <JogadorCard key={d.id} d={d} />)}
+      {dados.map(d => <JogadorCard key={d.id} d={d} onApagar={() => apagarResposta(d)} />)}
 
       {/* próximo passo: marcar a sessão no Convocação */}
       <Panel cor={T.gold} style={{ textAlign: "center", marginTop: 4 }}>
@@ -1186,11 +1525,46 @@ function MestrePainel({ codigo, conclave, onTrocar }) {
           <CalendarDays size={16} /> Ir para o Convocação <ExternalLink size={15} />
         </a>
       </Panel>
+
+      {/* gestão do conclave */}
+      <Panel>
+        <h3 style={{ fontFamily: display, fontSize: 15, color: T.ink2, margin: "0 0 12px", letterSpacing: ".04em" }}>Gestão do conclave</h3>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", marginBottom: 12 }}>
+          <span style={{ fontSize: 13, color: T.ink2 }}>Sistema de regras:</span>
+          <select value={meta?.sistema || "D&D 5e"} onChange={e => salvarMeta({ sistema: e.target.value })}
+            style={{ ...inputStyle, width: "auto", minWidth: 180, padding: "8px 12px" }}>
+            {SISTEMAS_REGRAS.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </div>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <Btn onClick={renomear}>Renomear</Btn>
+          <Btn onClick={definirEsperados}>Jogadores esperados</Btn>
+          <Btn variant={meta?.encerrado ? "solid" : "blood"} onClick={alternarEncerrado}>{meta?.encerrado ? "Reabrir conclave" : "Encerrar conclave"}</Btn>
+        </div>
+      </Panel>
     </div>
   );
 }
 
-function JogadorCard({ d }) {
+function ProgressoMesa({ feitos, esperados }) {
+  if (!esperados || esperados <= 0) return null;
+  const pct = Math.min(100, Math.round((feitos / esperados) * 100));
+  const completo = feitos >= esperados;
+  return (
+    <Panel cor={completo ? T.gold : undefined} style={{ padding: "14px 16px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+        <span style={{ fontFamily: display, fontSize: 14, color: T.ink }}>{completo ? "Mesa completa!" : "Aguardando a mesa"}</span>
+        <span style={{ fontFamily: display, fontSize: 14, color: completo ? T.gold : T.ink2 }}>{feitos} de {esperados} responderam</span>
+      </div>
+      <div style={{ height: 8, background: T.bg2, borderRadius: 8, overflow: "hidden", border: `1px solid ${T.lineSoft}` }}>
+        <div style={{ height: "100%", width: `${pct}%`, background: completo ? T.gold : `linear-gradient(90deg, ${T.ember}, ${T.gold})`, transition: "width .4s" }} />
+      </div>
+      {completo && <p style={{ color: T.ink2, fontSize: 13, margin: "8px 0 0" }}>Todos responderam — hora de marcar a sessão.</p>}
+    </Panel>
+  );
+}
+
+function JogadorCard({ d, onApagar }) {
   const [open, setOpen] = useState(false);
   const dom = PROFILES[d.dominante], sec = PROFILES[d.secundario];
   return (
@@ -1248,6 +1622,11 @@ function JogadorCard({ d }) {
           {d.linhas && <Bloco titulo="Linhas (proibido)"><Txt>{d.linhas}</Txt></Bloco>}
           {d.veus && <Bloco titulo="Véus (fora de cena)"><Txt>{d.veus}</Txt></Bloco>}
           {d.expectativas && <Bloco titulo="Expectativas"><Txt>{d.expectativas}</Txt></Bloco>}
+          {onApagar && (
+            <div style={{ marginTop: 16, textAlign: "right" }}>
+              <Btn variant="blood" onClick={onApagar}><Trash2 size={13} /> Apagar resposta</Btn>
+            </div>
+          )}
         </div>
       )}
     </Panel>
