@@ -127,75 +127,75 @@ const CLASSES = {
 
 /* ========================= PERGUNTAS ========================= */
 const QUESTOES = [
-  { q: "Você entra numa taverna nova. Seu primeiro impulso:", o: [
-    ["ator", "Puxa conversa com o taverneiro"],
-    ["estrategista", "Escolhe um canto de onde enxerga a porta"],
-    ["narrador", "Repara nos brasões e bandeiras nas paredes"],
-    ["investigador", "Acompanha com o olhar quem saiu depressa"],
-    ["socializador", "Paga uma rodada pra mesa que ri mais alto"],
+  { q: "Numa taverna nova, o que você faz primeiro?", o: [
+    ["ator", "Puxa papo com o taverneiro — já no personagem"],
+    ["estrategista", "Mapeia as saídas, conta os guardas, avalia ameaças"],
+    ["narrador", "Pergunta sobre as lendas e a história da cidade"],
+    ["investigador", "Repara em quem cochicha no canto — e por quê"],
+    ["socializador", "Paga uma rodada pra mesa ao lado"],
   ]},
-  { q: "Uma porta selada com runas estranhas bloqueia o caminho. Você...", o: [
-    ["ator", "Pousa a mão nela e fala como se ela ouvisse"],
-    ["estrategista", "Testa qual recurso gasta menos pra abri-la"],
-    ["narrador", "Fica imaginando quem a selou, e por quê"],
-    ["investigador", "Copia os símbolos e começa a compará-los"],
-    ["socializador", "Junta a galera pra tentarem no chute, rindo"],
+  { q: "Uma porta selada com runas estranhas. Você...", o: [
+    ["ator", "Declama um discurso dramático diante dela"],
+    ["estrategista", "Calcula como arrombá-la gastando o mínimo"],
+    ["narrador", "Quer saber que povo deixou aquelas runas"],
+    ["investigador", "Começa a decifrar o enigma"],
+    ["socializador", "Chama todo mundo pra tentar junto"],
   ]},
-  { q: "Começa um combate decisivo. Por baixo dos dados, seu foco está em...", o: [
-    ["ator", "Como seu personagem encara o perigo na pele"],
-    ["estrategista", "Onde se posicionar pra render mais"],
-    ["narrador", "O que esse confronto significa lá na frente"],
-    ["investigador", "O que o inimigo repete e onde ele falha"],
-    ["socializador", "Avisar os colegas e vibrar a cada acerto"],
+  { q: "Começa um combate épico. Seu foco está em...", o: [
+    ["ator", "As emoções e a postura do personagem na luta"],
+    ["estrategista", "Posicionamento, combos e usar o terreno"],
+    ["narrador", "Como essa batalha muda o rumo da saga"],
+    ["investigador", "O padrão de ataque do vilão e seu ponto fraco"],
+    ["socializador", "Coordenar com a galera e comemorar os acertos"],
   ]},
-  { q: "Entre uma sessão e outra, você provavelmente está...", o: [
-    ["ator", "Pensando no que seu personagem sente agora"],
-    ["estrategista", "Mexendo na ficha pra ela render mais"],
-    ["narrador", "Voltando à história pra entender onde ela caminha"],
-    ["investigador", "Juntando as pontas soltas pra ver o que falta"],
-    ["socializador", "No grupo do zap, já puxando a próxima"],
+  { q: "Entre uma sessão e outra, você está...", o: [
+    ["ator", "Escrevendo os pensamentos e o diário do personagem"],
+    ["estrategista", "Otimizando a ficha e planejando a evolução"],
+    ["narrador", "Relendo a lore e teorizando sobre o mundo"],
+    ["investigador", "Montando o mural de pistas e fios vermelhos"],
+    ["socializador", "No grupo, mandando meme e marcando a próxima"],
   ]},
-  { q: "Vocês cruzam com um NPC enigmático. Sua reação imediata:", o: [
-    ["ator", "Entrar no jogo dele e sustentar a conversa"],
-    ["estrategista", "Medir o quão perigoso ele seria numa briga"],
-    ["narrador", "Se perguntar que papel ele terá nisso tudo"],
+  { q: "O mestre te dá liberdade total numa cena. Você escolhe...", o: [
+    ["ator", "Um diálogo íntimo e de desenvolvimento pessoal"],
+    ["estrategista", "Um desafio tático difícil com grande recompensa"],
+    ["narrador", "Uma revelação que muda como vocês veem a história"],
+    ["investigador", "Um enigma difícil pra desvendar peça por peça"],
+    ["socializador", "Uma festa ou torneio cheio de gente"],
+  ]},
+  { q: "Seu personagem ideal é aquele que...", o: [
+    ["ator", "Tem drama interno rico e arcos emocionais"],
+    ["estrategista", "É mecanicamente poderoso e eficiente"],
+    ["narrador", "Está enraizado na história do mundo"],
+    ["investigador", "É perspicaz e faz sempre as perguntas certas"],
+    ["socializador", "Une o grupo e torna tudo mais divertido"],
+  ]},
+  { q: "O melhor elogio que o mestre poderia te dar:", o: [
+    ["ator", "\u201CVocê É o seu personagem.\u201D"],
+    ["estrategista", "\u201CQue jogada brilhante!\u201D"],
+    ["narrador", "\u201CVocê captou a alma dessa história.\u201D"],
+    ["investigador", "\u201CVocê desvendou tudo antes de todos.\u201D"],
+    ["socializador", "\u201CA mesa não seria a mesma sem você.\u201D"],
+  ]},
+  { q: "Diante de um NPC misterioso, sua primeira reação:", o: [
+    ["ator", "Conduzir uma negociação tensa e cheia de nuances"],
+    ["estrategista", "Avaliar se é ameaça e como neutralizá-lo"],
+    ["narrador", "Imaginar que papel ele terá na história"],
     ["investigador", "Reparar no que ele evita dizer"],
-    ["socializador", "Puxar ele pro lado de vocês"],
+    ["socializador", "Tentar transformá-lo em aliado do grupo"],
   ]},
-  { q: "O mestre te dá uma cena livre, do jeito que você quiser. Você pede...", o: [
-    ["ator", "Uma conversa que mexa fundo com seu personagem"],
-    ["estrategista", "Um obstáculo difícil que valha a pena vencer"],
-    ["narrador", "Um segredo que muda como vocês veem tudo"],
-    ["investigador", "Um quebra-cabeça pra resolver no detalhe"],
-    ["socializador", "Uma noite agitada e cheia de gente"],
+  { q: "Uma sessão perfeita termina com...", o: [
+    ["ator", "Uma cena que te deu arrepios interpretando"],
+    ["estrategista", "Um plano arriscado que deu certo na última rodada"],
+    ["narrador", "Uma virada à altura da saga que estão vivendo"],
+    ["investigador", "O \u201Cclique\u201D de juntar todas as pistas"],
+    ["socializador", "Todo mundo rindo e já com saudade da próxima"],
   ]},
-  { q: "O melhor elogio que o mestre poderia te fazer seria:", o: [
-    ["ator", "\u201CPor um instante, esqueci que era você falando.\u201D"],
-    ["estrategista", "\u201CNão sei como você achou essa saída.\u201D"],
-    ["narrador", "\u201CVou lembrar dessa cena por muito tempo.\u201D"],
-    ["investigador", "\u201CComo você juntou tudo antes de mim?\u201D"],
-    ["socializador", "\u201CCom você na mesa, todo mundo joga melhor.\u201D"],
-  ]},
-  { q: "Seu personagem cai numa cena dramática. Sua reação de verdade:", o: [
-    ["ator", "Dar aos últimos momentos o peso que merecem"],
-    ["estrategista", "Rebobinar onde o plano desandou"],
-    ["narrador", "Pensar no rastro que isso deixa na jornada"],
-    ["investigador", "Querer saber o que passou despercebido"],
-    ["socializador", "Olhar pro grupo e pensar em seguir juntos"],
-  ]},
-  { q: "A mesa empaca: ninguém concorda sobre o que fazer. Você...", o: [
-    ["ator", "Faz o que seu personagem faria e deixa rolar"],
-    ["estrategista", "Mostra qual opção tem mais chance de dar certo"],
-    ["narrador", "Puxa pro caminho que rende a melhor virada"],
-    ["investigador", "Lembra de um detalhe que muda a conta"],
-    ["socializador", "Procura um acordo que agrade todo mundo"],
-  ]},
-  { q: "Criando um personagem novo, o que vem primeiro na sua cabeça?", o: [
-    ["ator", "Quem ele é por dentro, com defeitos e tudo"],
-    ["estrategista", "A combinação de habilidades que funciona"],
-    ["narrador", "De onde ele veio e o que o trouxe até aqui"],
-    ["investigador", "Um mistério no passado dele pra puxar depois"],
-    ["socializador", "Como ele se dá com os outros do grupo"],
+  { q: "No fundo, o que te faz amar esse hobby?", o: [
+    ["ator", "Encarnar alguém totalmente diferente de você"],
+    ["estrategista", "Superar desafios que exigem a mente afiada"],
+    ["narrador", "Viver dentro de uma grande história"],
+    ["investigador", "A satisfação de desvendar o que está oculto"],
+    ["socializador", "As pessoas e os momentos que só acontecem na mesa"],
   ]},
 ];
 
@@ -445,6 +445,17 @@ export default function App() {
       l.href = "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap";
       document.head.appendChild(l);
     }
+    if (!document.getElementById("sz-anim")) {
+      const s = document.createElement("style");
+      s.id = "sz-anim";
+      s.textContent = `
+        @keyframes szCardFade { from { opacity: 0; transform: translateY(16px) scale(.985); } to { opacity: 1; transform: none; } }
+        @keyframes szFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        @media (prefers-reduced-motion: reduce) {
+          [data-reveal] { animation: none !important; }
+        }`;
+      document.head.appendChild(s);
+    }
   }, []);
 
   return (
@@ -598,6 +609,9 @@ function PlayerFlow({ onHome }) {
 
   // ordem das opções sorteada uma vez por sessão (estável ao navegar)
   const quiz = useMemo(() => QUESTOES.map(q => ({ q: q.q, o: embaralhar(q.o) })), []);
+
+  // cada etapa (e o veredito) começa do topo, focando o card
+  useEffect(() => { try { window.scrollTo(0, 0); } catch (e) {} }, [fase, qi]);
 
   const scores = useMemo(() => {
     const s = Object.fromEntries(AXES.map(a => [a, 0]));
@@ -820,14 +834,15 @@ function PlayerFlow({ onHome }) {
 
   /* -------- RESULTADO -------- */
   const dom = PROFILES[ranking[0]], sec = PROFILES[ranking[1]];
+  const reduce = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   return (
     <div>
-      <div style={{ fontFamily: display, color: T.gold, fontSize: 12, letterSpacing: ".25em", textTransform: "uppercase", textAlign: "center", marginBottom: 12 }}>
+      <div data-reveal style={{ fontFamily: display, color: T.gold, fontSize: 12, letterSpacing: ".25em", textTransform: "uppercase", textAlign: "center", marginBottom: 12, animation: reduce ? undefined : "szFadeIn .5s ease both" }}>
         {nome.trim() || "Jogador"}, eis o seu veredito
       </div>
-      <img src={CARDS[ranking[0]]} alt={dom.nome}
-        style={{ width: "100%", maxWidth: 430, display: "block", margin: "0 auto 18px", borderRadius: 10, boxShadow: "0 16px 50px rgba(0,0,0,.55)" }} />
-      <Panel cor={dom.cor}>
+      <img src={CARDS[ranking[0]]} alt={dom.nome} data-reveal
+        style={{ width: "100%", maxWidth: 430, display: "block", margin: "0 auto 18px", borderRadius: 10, boxShadow: "0 16px 50px rgba(0,0,0,.55)", animation: reduce ? undefined : "szCardFade .75s cubic-bezier(.2,.7,.2,1) both" }} />
+      <Panel cor={dom.cor} style={{ animation: reduce ? undefined : "szFadeIn .6s ease .15s both" }}>
         <div style={{ textAlign: "center", fontFamily: display, color: T.ink2, fontSize: 12, letterSpacing: ".2em", textTransform: "uppercase", marginBottom: 2 }}>Seu brasão</div>
         <Sigil data={radarData} cor={dom.cor} size={240} />
         <div style={{ textAlign: "center", color: T.ink2, fontSize: 14.5 }}>
@@ -835,7 +850,7 @@ function PlayerFlow({ onHome }) {
         </div>
       </Panel>
 
-      <Panel cor={dom.cor} style={{ marginTop: 16 }}>
+      <Panel cor={dom.cor} style={{ marginTop: 16, animation: reduce ? undefined : "szFadeIn .6s ease .3s both" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
           <dom.Icone size={18} style={{ color: dom.cor }} />
           <h3 style={{ fontFamily: display, fontSize: 16, color: T.ink, margin: 0 }}>Classes que combinam com você</h3>
