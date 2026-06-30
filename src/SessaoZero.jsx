@@ -66,6 +66,16 @@ const PROFILES = {
 };
 const AXES = ["ator", "estrategista", "narrador", "investigador", "socializador"];
 
+// embaralha uma cópia (Fisher-Yates) — usado para sortear a ordem das opções
+const embaralhar = (arr) => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
 /* Classes (D&D 5e) sugeridas por arquétipo — orientação para iniciantes */
 const CLASSES = {
   ator: {
@@ -118,74 +128,74 @@ const CLASSES = {
 /* ========================= PERGUNTAS ========================= */
 const QUESTOES = [
   { q: "Você entra numa taverna nova. Seu primeiro impulso:", o: [
-    ["ator", "Já puxa papo com o taverneiro, na pele do personagem"],
-    ["estrategista", "Mapeia saídas, conta guardas e mede as ameaças"],
-    ["narrador", "Pergunta sobre as lendas e a história daquela cidade"],
-    ["investigador", "Repara em quem cochicha no canto — e por quê"],
-    ["socializador", "Paga uma rodada pra mesa ao lado e faz amizade"],
+    ["ator", "Puxa conversa com o taverneiro"],
+    ["estrategista", "Escolhe um canto de onde enxerga a porta"],
+    ["narrador", "Repara nos brasões e bandeiras nas paredes"],
+    ["investigador", "Acompanha com o olhar quem saiu depressa"],
+    ["socializador", "Paga uma rodada pra mesa que ri mais alto"],
   ]},
   { q: "Uma porta selada com runas estranhas bloqueia o caminho. Você...", o: [
-    ["ator", "Declama um discurso dramático diante dela"],
-    ["estrategista", "Acha o jeito mais eficiente de passar por ela"],
-    ["narrador", "Quer saber que mundo perdido deixou aquelas runas"],
-    ["investigador", "Põe a mão na massa e começa a decifrar o enigma"],
-    ["socializador", "Chama todo mundo pra resolver junto, na tentativa e erro"],
+    ["ator", "Pousa a mão nela e fala como se ela ouvisse"],
+    ["estrategista", "Testa qual recurso gasta menos pra abri-la"],
+    ["narrador", "Fica imaginando quem a selou, e por quê"],
+    ["investigador", "Copia os símbolos e começa a compará-los"],
+    ["socializador", "Junta a galera pra tentarem no chute, rindo"],
   ]},
   { q: "Começa um combate decisivo. Por baixo dos dados, seu foco está em...", o: [
-    ["ator", "As emoções e a coragem (ou o medo) do seu personagem"],
-    ["estrategista", "Posicionamento, combos e usar o terreno a favor"],
-    ["narrador", "Como essa batalha vai mudar o rumo da saga"],
-    ["investigador", "O padrão de ataque do vilão e seu ponto fraco"],
-    ["socializador", "Coordenar com a galera e comemorar cada acerto"],
+    ["ator", "Como seu personagem encara o perigo na pele"],
+    ["estrategista", "Onde se posicionar pra render mais"],
+    ["narrador", "O que esse confronto significa lá na frente"],
+    ["investigador", "O que o inimigo repete e onde ele falha"],
+    ["socializador", "Avisar os colegas e vibrar a cada acerto"],
   ]},
   { q: "Entre uma sessão e outra, você provavelmente está...", o: [
-    ["ator", "Escrevendo os pensamentos e o diário do personagem"],
-    ["estrategista", "Otimizando a ficha e planejando a próxima evolução"],
-    ["narrador", "Relendo a lore e teorizando sobre o mundo"],
-    ["investigador", "Montando o mural de pistas com os fios vermelhos"],
-    ["socializador", "No grupo, mandando meme e já marcando a próxima"],
+    ["ator", "Pensando no que seu personagem sente agora"],
+    ["estrategista", "Mexendo na ficha pra ela render mais"],
+    ["narrador", "Voltando à história pra entender onde ela caminha"],
+    ["investigador", "Juntando as pontas soltas pra ver o que falta"],
+    ["socializador", "No grupo do zap, já puxando a próxima"],
   ]},
   { q: "Vocês cruzam com um NPC enigmático. Sua reação imediata:", o: [
-    ["ator", "Conduzir uma conversa tensa, cheia de nuances"],
-    ["estrategista", "Avaliar se é ameaça e como neutralizá-lo, se preciso"],
-    ["narrador", "Imaginar como ele se encaixa na trama que está se formando"],
-    ["investigador", "Cruzar o que ele diz com o que já sabem, atrás da brecha"],
-    ["socializador", "Tentar transformá-lo em aliado do grupo"],
+    ["ator", "Entrar no jogo dele e sustentar a conversa"],
+    ["estrategista", "Medir o quão perigoso ele seria numa briga"],
+    ["narrador", "Se perguntar que papel ele terá nisso tudo"],
+    ["investigador", "Reparar no que ele evita dizer"],
+    ["socializador", "Puxar ele pro lado de vocês"],
   ]},
   { q: "O mestre te dá uma cena livre, do jeito que você quiser. Você pede...", o: [
-    ["ator", "Um momento íntimo de desenvolvimento do seu personagem"],
-    ["estrategista", "Um desafio difícil com uma recompensa à altura"],
-    ["narrador", "Uma revelação que dá novo sentido à história de vocês"],
-    ["investigador", "Um enigma complexo pra desmontar peça por peça"],
-    ["socializador", "Um evento com muita gente — festa, torneio, feira"],
+    ["ator", "Uma conversa que mexa fundo com seu personagem"],
+    ["estrategista", "Um obstáculo difícil que valha a pena vencer"],
+    ["narrador", "Um segredo que muda como vocês veem tudo"],
+    ["investigador", "Um quebra-cabeça pra resolver no detalhe"],
+    ["socializador", "Uma noite agitada e cheia de gente"],
   ]},
   { q: "O melhor elogio que o mestre poderia te fazer seria:", o: [
-    ["ator", "\u201CVocê É o seu personagem.\u201D"],
-    ["estrategista", "\u201CQue jogada brilhante!\u201D"],
-    ["narrador", "\u201CVocê captou a alma dessa história.\u201D"],
-    ["investigador", "\u201CVocê desvendou tudo antes de todo mundo.\u201D"],
-    ["socializador", "\u201CA mesa não seria a mesma sem você.\u201D"],
+    ["ator", "\u201CPor um instante, esqueci que era você falando.\u201D"],
+    ["estrategista", "\u201CNão sei como você achou essa saída.\u201D"],
+    ["narrador", "\u201CVou lembrar dessa cena por muito tempo.\u201D"],
+    ["investigador", "\u201CComo você juntou tudo antes de mim?\u201D"],
+    ["socializador", "\u201CCom você na mesa, todo mundo joga melhor.\u201D"],
   ]},
   { q: "Seu personagem cai numa cena dramática. Sua reação de verdade:", o: [
-    ["ator", "Encarar como um clímax e interpretar os últimos momentos à altura"],
-    ["estrategista", "Rever friamente onde o plano falhou — e o que faria diferente"],
-    ["narrador", "Pensar em como essa perda marca a história do grupo"],
-    ["investigador", "Querer entender exatamente o que vocês não viram a tempo"],
-    ["socializador", "Já pensar em como o grupo se reergue junto"],
+    ["ator", "Dar aos últimos momentos o peso que merecem"],
+    ["estrategista", "Rebobinar onde o plano desandou"],
+    ["narrador", "Pensar no rastro que isso deixa na jornada"],
+    ["investigador", "Querer saber o que passou despercebido"],
+    ["socializador", "Olhar pro grupo e pensar em seguir juntos"],
   ]},
   { q: "A mesa empaca: ninguém concorda sobre o que fazer. Você...", o: [
-    ["ator", "Age como seu personagem agiria, custe o que custar"],
-    ["estrategista", "Aponta qual opção dá a melhor chance, e por quê"],
-    ["narrador", "Pergunta qual caminho rende a história mais interessante"],
-    ["investigador", "Volta às pistas pra ver o que a decisão deveria considerar"],
-    ["socializador", "Costura um meio-termo pra todo mundo embarcar junto"],
+    ["ator", "Faz o que seu personagem faria e deixa rolar"],
+    ["estrategista", "Mostra qual opção tem mais chance de dar certo"],
+    ["narrador", "Puxa pro caminho que rende a melhor virada"],
+    ["investigador", "Lembra de um detalhe que muda a conta"],
+    ["socializador", "Procura um acordo que agrade todo mundo"],
   ]},
   { q: "Criando um personagem novo, o que vem primeiro na sua cabeça?", o: [
-    ["ator", "A personalidade, as feridas e as contradições dele"],
-    ["estrategista", "A build — a combinação de habilidades que funciona"],
-    ["narrador", "De onde ele vem e como se liga ao mundo da campanha"],
-    ["investigador", "Um segredo no passado dele pra desvendar jogando"],
-    ["socializador", "Como ele se entrosa com o resto do grupo"],
+    ["ator", "Quem ele é por dentro, com defeitos e tudo"],
+    ["estrategista", "A combinação de habilidades que funciona"],
+    ["narrador", "De onde ele veio e o que o trouxe até aqui"],
+    ["investigador", "Um mistério no passado dele pra puxar depois"],
+    ["socializador", "Como ele se dá com os outros do grupo"],
   ]},
 ];
 
@@ -484,7 +494,7 @@ function Home({ onPick }) {
     <div>
       <p style={{ textAlign: "center", color: T.ink2, fontSize: 16, lineHeight: 1.6, maxWidth: 520, margin: "0 auto 32px", fontStyle: "italic" }}>
         Antes de a primeira vela se acender, que cada um revele a alma que traz à mesa.
-        Responda com sinceridade — não há respostas erradas, apenas a sua vontade está em jogo.
+        Responda com sinceridade — não há respostas erradas, apenas a sua verdade de jogo.
       </p>
       <div style={{ display: "grid", gap: 14 }}>
         <Card onClick={() => onPick("player")} Icone={UserRound} cor={T.gold}
@@ -585,6 +595,9 @@ function PlayerFlow({ onHome }) {
   const [veus, setVeus] = useState("");
   const [expect, setExpect] = useState("");
   const [salvo, setSalvo] = useState(false);
+
+  // ordem das opções sorteada uma vez por sessão (estável ao navegar)
+  const quiz = useMemo(() => QUESTOES.map(q => ({ q: q.q, o: embaralhar(q.o) })), []);
 
   const scores = useMemo(() => {
     const s = Object.fromEntries(AXES.map(a => [a, 0]));
@@ -717,7 +730,7 @@ function PlayerFlow({ onHome }) {
 
   /* -------- QUIZ -------- */
   if (fase === "quiz") {
-    const Q = QUESTOES[qi];
+    const Q = quiz[qi];
     return (
       <div>
         <Progresso atual={qi + 1} total={QUESTOES.length} />
