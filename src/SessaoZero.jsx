@@ -484,7 +484,7 @@ function Home({ onPick }) {
     <div>
       <p style={{ textAlign: "center", color: T.ink2, fontSize: 16, lineHeight: 1.6, maxWidth: 520, margin: "0 auto 32px", fontStyle: "italic" }}>
         Antes de a primeira vela se acender, que cada um revele a alma que traz à mesa.
-        Responda com sinceridade — não há respostas erradas, apenas a sua verdade de jogo.
+        Responda com sinceridade — não há respostas erradas, apenas a sua vontade está em jogo.
       </p>
       <div style={{ display: "grid", gap: 14 }}>
         <Card onClick={() => onPick("player")} Icone={UserRound} cor={T.gold}
